@@ -7,11 +7,11 @@ import debounce from 'just-debounce-it';
 import { lazy, memo, Suspense } from 'preact/compat';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
-  matchPath,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
+    matchPath,
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
 } from 'react-router-dom';
 import { subscribe } from 'valtio';
 import { unstable_enableOp } from 'valtio/vanilla';
@@ -32,7 +32,6 @@ import NavigationCommand from './components/navigation-command';
 import NotificationService from './components/notification-service';
 import SearchCommand from './components/search-command';
 import Shortcuts from './components/shortcuts';
-import NotFound from './pages/404';
 import AccountCollections from './pages/account-collections';
 import AccountStatuses from './pages/account-statuses';
 import AnnualReport from './pages/annual-report';
@@ -59,13 +58,13 @@ import StatusRoute from './pages/status-route';
 import Trending from './pages/trending';
 import Welcome from './pages/welcome';
 import {
-  api,
-  hasInstance,
-  hasPreferences,
-  initAccount,
-  initClient,
-  initInstance,
-  initPreferences,
+    api,
+    hasInstance,
+    hasPreferences,
+    initAccount,
+    initClient,
+    initInstance,
+    initPreferences,
 } from './utils/api';
 import { getAccessToken } from './utils/auth';
 import { AuthProvider, useAuth } from './utils/auth-context';
@@ -73,11 +72,11 @@ import focusDeck from './utils/focus-deck';
 import states, { hideAllModals, initStates, statusKey } from './utils/states';
 import store from './utils/store';
 import {
-  getAccount,
-  getCredentialApplication,
-  getCurrentAccount,
-  getVapidKey,
-  setCurrentAccountID,
+    getAccount,
+    getCredentialApplication,
+    getCurrentAccount,
+    getVapidKey,
+    setCurrentAccountID,
 } from './utils/store-utils';
 
 // Lazy load Sandbox component only in development
