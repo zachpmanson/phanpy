@@ -8,13 +8,13 @@ import PQueue from 'p-queue';
 import { Fragment } from 'preact';
 import { memo } from 'preact/compat';
 import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useReducer,
+    useRef,
+    useState,
 } from 'preact/hooks';
 import punycode from 'punycode/';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -37,8 +37,8 @@ import niceDateTime from '../utils/nice-date-time';
 import openCompose from '../utils/open-compose';
 import pmem from '../utils/pmem';
 import {
-  getPostQuoteApprovalPolicy,
-  supportsNativeQuote,
+    getPostQuoteApprovalPolicy,
+    supportsNativeQuote,
 } from '../utils/quote-utils';
 import RTF from '../utils/relative-time-format';
 import safeBoundingBoxPadding from '../utils/safe-bounding-box-padding';
@@ -48,7 +48,7 @@ import showToast from '../utils/show-toast';
 import { speak, supportsTTS } from '../utils/speech';
 import states, { getStatus, saveStatus, statusKey } from '../utils/states';
 import statusPeek from '../utils/status-peek';
-import { getAPIVersions, getCurrentAccID } from '../utils/store-utils';
+import { getCurrentAccID } from '../utils/store-utils';
 import supports from '../utils/supports';
 import useTruncated from '../utils/useTruncated';
 import visibilityIconsMap from '../utils/visibility-icons-map';
@@ -689,7 +689,7 @@ function Status({
   // const targetLanguage = getTranslateTargetLanguage(true);
   // const contentTranslationHideLanguages =
   //   snapStates.settings.contentTranslationHideLanguages || [];
-  const { contentTranslation, contentTranslationAutoInline } =
+  const { contentTranslation, contentTranslationAutoInline, hideLinkPreviews } =
     snapStates.settings;
   if (!contentTranslation) enableTranslate = false;
   const inlineTranslate = useMemo(() => {
@@ -2792,7 +2792,7 @@ function Status({
                         />
                       ))}
                     </div>
-                  ) : !!card && /^https/i.test(card?.url) ? (
+                  ) : !hideLinkPreviews && !!card && /^https/i.test(card?.url) ? (
                     <StatusCard
                       card={card}
                       selfReferential={
