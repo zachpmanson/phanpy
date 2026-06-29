@@ -105,7 +105,7 @@ function NameText({
     >
       {showAvatar && (
         <>
-          <Avatar url={avatarStatic || avatar} squircle={bot} />{' '}
+          <Avatar url={avatarStatic || avatar} squircle={bot} size="auto" />{' '}
         </>
       )}
       {displayName && !short ? (
