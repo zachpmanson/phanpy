@@ -517,7 +517,7 @@ function Status({
     return null;
   }
 
-  const plainMode = store.local.get('plainMode');
+  const compactMode = store.local.get('compactMode');
 
   console.debug('RENDER Status', id, status?.account?.displayName, quoted);
 
@@ -2271,7 +2271,7 @@ function Status({
             )}
           </div>
         )}
-        {size !== 's' && !plainMode && (
+        {size !== 's' && !compactMode && (
           <a
             href={accountURL}
             tabindex="-1"
@@ -2301,7 +2301,7 @@ function Status({
                 <NameText
                   account={status.account}
                   instance={instance}
-                  showAvatar={size === 's' || plainMode}
+                  showAvatar={size === 's' || compactMode}
                   showAcct={isSizeLarge}
                 />
               </span>

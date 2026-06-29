@@ -3333,7 +3333,7 @@ ul.link-list li a .icon {
   }
 }
 
-html.is-plain .timeline:not(.flat) > li {
+html.is-compact .timeline:not(.flat) > li {
   --item-radius: 0;
   border-radius: 0;
   margin: 0;
@@ -3342,27 +3342,27 @@ html.is-plain .timeline:not(.flat) > li {
   border-top: none;
 }
 
-html.is-plain .deck {
+html.is-compact .deck {
   width: 100%;
   margin-inline: 0;
 }
 
-html.is-plain .deck-backdrop .deck {
+html.is-compact .deck-backdrop .deck {
   width: var(--main-width);
   margin-inline: auto;
 }
 
-html.is-plain .deck > header {
+html.is-compact .deck > header {
   border-inline: none;
   border-top: none;
 }
 
-html.is-plain .timeline-deck > header {
+html.is-compact .timeline-deck > header {
   --margin-top: 0px;
   margin-inline: 0;
 }
 
-html.is-plain .timeline-deck > header .header-grid {
+html.is-compact .timeline-deck > header .header-grid {
   border-radius: 0;
   border-bottom: var(--hairline-width) solid var(--divider-color);
   background-color: var(--bg-color);
@@ -3370,75 +3370,75 @@ html.is-plain .timeline-deck > header .header-grid {
   min-height: 3em;
 }
 
-html.is-plain .name-text .avatar {
+html.is-compact .name-text .avatar {
   transform: none;
 }
 
-html.is-plain .status > .container > .meta {
+html.is-compact .status > .container > .meta {
   margin-bottom: 4px;
 }
 
-html.is-plain .status.compact-thread .status-thread-badge-container {
+html.is-compact .status.compact-thread .status-thread-badge-container {
   min-width: 20px;
 }
 
 /* Hero post: no avatar column in plain mode, so reset the negative margins that span it */
-html.is-plain .status.large > .container > .content-container,
-html.is-plain .status.large .extra-meta,
-html.is-plain .status.large .emoji-reactions,
-html.is-plain .status.large .actions {
+html.is-compact .status.large > .container > .content-container,
+html.is-compact .status.large .extra-meta,
+html.is-compact .status.large .emoji-reactions,
+html.is-compact .status.large .actions {
   margin-inline-start: 0;
 }
 
 /* Reddit-style nesting for contextual timeline (post overlay) in plain theme */
-html.is-plain .timeline.contextual > li {
+html.is-compact .timeline.contextual > li {
   background-image: none;
 }
-html.is-plain .timeline.contextual > li.descendant:not(.thread):before,
-html.is-plain .timeline.contextual > li .replies li:not(.content li):before,
-html.is-plain .timeline.contextual > li.thread .replies li:not(.content li):before {
+html.is-compact .timeline.contextual > li.descendant:not(.thread):before,
+html.is-compact .timeline.contextual > li .replies li:not(.content li):before,
+html.is-compact .timeline.contextual > li.thread .replies li:not(.content li):before {
   display: none;
 }
-html.is-plain .timeline.contextual > li.descendant.thread:after {
+html.is-compact .timeline.contextual > li.descendant.thread:after {
   display: none !important;
 }
-html.is-plain .timeline.contextual > li .replies li:not(.content li) {
+html.is-compact .timeline.contextual > li .replies li:not(.content li) {
   background-image: none;
 }
-html.is-plain .timeline.contextual > li.descendant,
-html.is-plain .timeline.contextual .replies {
+html.is-compact .timeline.contextual > li.descendant,
+html.is-compact .timeline.contextual .replies {
   margin-inline-start: 20px;
   border-inline-start: 2px solid var(--divider-color);
   padding-inline-start: 4px;
 }
-html.is-plain .timeline.contextual
+html.is-compact .timeline.contextual
   > li.descendant:not(.thread)
   > :is(.status-link, .status-focus),
-html.is-plain .timeline.contextual
+html.is-compact .timeline.contextual
   > li.descendant.thread
   > :is(.status-link, .status-focus)
   + .replies
   :is(.status-link, .status-focus),
-html.is-plain .timeline.contextual
+html.is-compact .timeline.contextual
   > li.descendant:not(.thread)
   > :is(.status-link, .status-focus)
   + .replies
   :is(.status-link, .status-focus) {
   padding-inline-start: 0;
 }
-html.is-plain .timeline.contextual > li.ancestor .replies-link,
-html.is-plain
+html.is-compact .timeline.contextual > li.ancestor .replies-link,
+html.is-compact
   .timeline.contextual
   > li.thread
   > :is(.status-link, .status-focus)
   .replies-link,
-html.is-plain
+html.is-compact
   .timeline.contextual
   > li.descendant.thread
   > :is(.status-link, .status-focus)
   + .replies
   .replies-summary,
-html.is-plain
+html.is-compact
   .timeline.contextual
   > li.descendant:not(.thread)
   > :is(.status-link, .status-focus)
@@ -3447,16 +3447,16 @@ html.is-plain
   margin-inline-start: 0;
 }
 @media (min-width: 40em) {
-  html.is-plain #columns > * {
+  html.is-compact #columns > * {
     padding-inline: 0;
   }
 }
-html.is-plain .status:not(.small) > .container {
+html.is-compact .status:not(.small) > .container {
   padding-inline-start: 0;
 }
-html.is-plain .status.compact-reply::before {
+html.is-compact .status.compact-reply::before {
   display: none;
 }
-html.is-plain .timeline:not(.flat) > li.timeline-item-container {
+html.is-compact .timeline:not(.flat) > li.timeline-item-container {
   background-image: none;
 }

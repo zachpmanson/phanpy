@@ -233,7 +233,7 @@ function Settings({ onClose }) {
                   defaultChecked={currentCompactMode}
                   onChange={(e) => {
                     const compact = e.target.checked;
-                    document.documentElement.classList.toggle('is-compact', plain);
+                    document.documentElement.classList.toggle('is-compact', compact);
                     if (compact) {
                       store.local.set('compactMode', true);
                     } else {
