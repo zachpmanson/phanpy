@@ -308,7 +308,13 @@ if (isIOS) {
 }
 
 {
-  const theme = store.local.get('theme');
+  let theme = store.local.get('theme');
+  // Migrate old plain theme setting to separate compactMode setting
+  if (theme === 'plain') {
+    store.local.del('theme');
+    store.local.set('compactMode', true);
+    theme = null;
+  }
   // If there's a theme, it's NOT auto
   if (theme) {
     // dark | light
@@ -324,9 +330,9 @@ if (isIOS) {
     if ($manualMeta) {
       $manualMeta.name = 'theme-color';
       $manualMeta.content =
-        theme === 'light'
-          ? $manualMeta.dataset.themeLightColor
-          : $manualMeta.dataset.themeDarkColor;
+        theme === 'dark'
+          ? $manualMeta.dataset.themeDarkColor
+          : $manualMeta.dataset.themeLightColor;
     }
     // Disable auto theme <meta>s
     const $autoMetas = document.querySelectorAll(
@@ -335,6 +341,10 @@ if (isIOS) {
     $autoMetas.forEach((m) => {
       m.name = '';
     });
+  }
+  const compactMode = store.local.get('compactMode');
+  if (compactMode) {
+    document.documentElement.classList.add('is-compact');
   }
   const textSize = store.local.get('textSize');
   if (textSize) {

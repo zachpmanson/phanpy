@@ -300,6 +300,10 @@
   }
 }
 
+html.is-compact {
+  --avatar-size: 25px;
+}
+
 *,
 *::before,
 *::after {

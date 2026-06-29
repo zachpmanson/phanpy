@@ -3332,3 +3332,131 @@ ul.link-list li a .icon {
     padding-block-start: 0;
   }
 }
+
+html.is-compact .timeline:not(.flat) > li {
+  --item-radius: 0;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+  border-inline: none;
+  border-top: none;
+}
+
+html.is-compact .deck {
+  width: 100%;
+  margin-inline: 0;
+}
+
+html.is-compact .deck-backdrop .deck {
+  width: var(--main-width);
+  margin-inline: auto;
+}
+
+html.is-compact .deck > header {
+  border-inline: none;
+  border-top: none;
+}
+
+html.is-compact .timeline-deck > header {
+  --margin-top: 0px;
+  margin-inline: 0;
+}
+
+html.is-compact .timeline-deck > header .header-grid {
+  border-radius: 0;
+  border-bottom: var(--hairline-width) solid var(--divider-color);
+  background-color: var(--bg-color);
+  backdrop-filter: none;
+  min-height: 3em;
+}
+
+html.is-compact .name-text .avatar {
+  transform: none;
+}
+
+html.is-compact .status > .container > .meta {
+  margin-bottom: 4px;
+}
+
+html.is-compact .status.compact-thread .status-thread-badge-container {
+  min-width: 20px;
+}
+
+/* Hero post: no avatar column in plain mode, so reset the negative margins that span it */
+html.is-compact .status.large > .container > .content-container,
+html.is-compact .status.large .extra-meta,
+html.is-compact .status.large .emoji-reactions,
+html.is-compact .status.large .actions {
+  margin-inline-start: 0;
+}
+
+/* Reddit-style nesting for contextual timeline (post overlay) in plain theme */
+html.is-compact .timeline.contextual > li {
+  background-image: none;
+}
+html.is-compact .timeline.contextual > li.descendant:not(.thread):before,
+html.is-compact .timeline.contextual > li .replies li:not(.content li):before,
+html.is-compact .timeline.contextual > li.thread .replies li:not(.content li):before {
+  display: none;
+}
+html.is-compact .timeline.contextual > li.descendant.thread:after {
+  display: none !important;
+}
+html.is-compact .timeline.contextual > li .replies li:not(.content li) {
+  background-image: none;
+}
+html.is-compact .timeline.contextual > li.descendant,
+html.is-compact .timeline.contextual .replies {
+  margin-inline-start: 20px;
+  border-inline-start: 2px solid var(--divider-color);
+  padding-inline-start: 4px;
+}
+html.is-compact .timeline.contextual
+  > li.descendant:not(.thread)
+  > :is(.status-link, .status-focus),
+html.is-compact .timeline.contextual
+  > li.descendant.thread
+  > :is(.status-link, .status-focus)
+  + .replies
+  :is(.status-link, .status-focus),
+html.is-compact .timeline.contextual
+  > li.descendant:not(.thread)
+  > :is(.status-link, .status-focus)
+  + .replies
+  :is(.status-link, .status-focus) {
+  padding-inline-start: 0;
+}
+html.is-compact .timeline.contextual > li.ancestor .replies-link,
+html.is-compact
+  .timeline.contextual
+  > li.thread
+  > :is(.status-link, .status-focus)
+  .replies-link,
+html.is-compact
+  .timeline.contextual
+  > li.descendant.thread
+  > :is(.status-link, .status-focus)
+  + .replies
+  .replies-summary,
+html.is-compact
+  .timeline.contextual
+  > li.descendant:not(.thread)
+  > :is(.status-link, .status-focus)
+  + .replies
+  .replies-summary {
+  margin-inline-start: 0;
+}
+@media (min-width: 40em) {
+  html.is-compact #columns > * {
+    padding-inline: 0;
+  }
+}
+html.is-compact .status:not(.small) > .container {
+  padding-inline-start: 0;
+}
+html.is-compact .status.compact-reply::before {
+  display: none;
+}
+html.is-compact .timeline:not(.flat) > li.timeline-item-container {
+  background-image: none;
+}

@@ -59,6 +59,7 @@ function Settings({ onClose }) {
   const { t } = useLingui();
   const snapStates = useSnapshot(states);
   const currentTheme = store.local.get('theme') || 'auto';
+  const currentCompactMode = store.local.get('compactMode') ?? false;
   const themeFormRef = useRef();
   const targetLanguage =
     snapStates.settings.contentTranslationTargetLanguage || null;
@@ -159,9 +160,9 @@ function Settings({ onClose }) {
                       if ($manualMeta) {
                         $manualMeta.name = 'theme-color';
                         $manualMeta.content =
-                          theme === 'light'
-                            ? $manualMeta.dataset.themeLightColor
-                            : $manualMeta.dataset.themeDarkColor;
+                          theme === 'dark'
+                            ? $manualMeta.dataset.themeDarkColor
+                            : $manualMeta.dataset.themeLightColor;
                       }
                       // Disable auto theme <meta>s
                       const $autoMetas = document.querySelectorAll(
@@ -224,6 +225,24 @@ function Settings({ onClose }) {
                   </div>
                 </form>
               </div>
+            </li>
+            <li class="block">
+              <label>
+                <input
+                  type="checkbox"
+                  defaultChecked={currentCompactMode}
+                  onChange={(e) => {
+                    const compact = e.target.checked;
+                    document.documentElement.classList.toggle('is-compact', compact);
+                    if (compact) {
+                      store.local.set('compactMode', true);
+                    } else {
+                      store.local.del('compactMode');
+                    }
+                  }}
+                />{' '}
+                <Trans>Compact mode</Trans>
+              </label>
             </li>
             <li>
               <div>
