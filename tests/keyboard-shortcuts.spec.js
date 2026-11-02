@@ -1,5 +1,5 @@
 // @ts-check
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/local';
 
 /** @typedef {import('@playwright/test').Page} Page */
 

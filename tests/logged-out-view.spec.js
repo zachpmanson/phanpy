@@ -1,5 +1,5 @@
 // @ts-check
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/local';
 
 test('has welcome page', async ({ page }) => {
   await page.goto('/');

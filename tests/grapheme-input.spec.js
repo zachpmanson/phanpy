@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/local';
 
 const graphemeInputSource = readFileSync(
   resolve(import.meta.dirname, '../src/components/grapheme-input.js'),
