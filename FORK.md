@@ -33,3 +33,11 @@ All local Git shells must source `/tmp/beltino-time-travel-phanpy.sh` and use it
 ## Link cards
 
 Account setting `settings-hideLinkPreviews` defaults false. Only the upstream `StatusCard` branch is suppressed; native/inline quoted posts, text, collections and other upstream branches remain intact. Desktop/mobile regression checks cover defaults, live toggling, namespace preservation and reload.
+
+## Media collapse
+
+Account key `settings-hideMediaPreviews`, default false, is retained. This is deliberately **collapse**, not blur: when upstream would conceal media (sensitive, blur filter, `reading:expand:media=hide_all`) and there is no explicit reveal, attachment renderers unmount. Ordinary non-sensitive media still follows upstream's default/show-all preference. Preview mode and explicit reveals retain precedence.
+
+Intentional improvement over the old fork: media-first ordinary `hide_all` and blur-filtered posts retain a separate reveal control even when their renderer is absent, so attachments are not stranded. Content-warning/sensitive media-first posts keep their existing Show content control. Show less unmounts media again. Shared control extraction leaves normal upstream behavior unchanged when the toggle is off.
+
+18 desktop/mobile checks pass, covering actual height reduction, single/multiple attachments, large-post multi-media, sensitivity, filter override of show-all, CW reveal/re-collapse, media-first ordinary and CW layouts, live toggling and reload persistence.

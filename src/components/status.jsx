@@ -706,7 +706,15 @@ function Status({
     contentTranslationAutoInline,
     hidePostMetrics,
     hideLinkPreviews,
+    hideMediaPreviews,
   } = snapStates.settings;
+  // Collapse only media upstream would conceal; explicit reveals and previews win.
+  const hidingMediaPreview =
+    hideMediaPreviews &&
+    !showSpoilerMedia &&
+    (sensitive ||
+      filterInfo?.action === 'blur' ||
+      readingExpandMedia === 'hide_all');
   if (!contentTranslation) enableTranslate = false;
   const inlineTranslate = useMemo(() => {
     if (
@@ -2126,6 +2134,43 @@ function Status({
     return [matched, ...others].slice(0, MAX_COLLECTIONS);
   }, [taggedCollections, card?.url]);
 
+  // Share the reveal control with media-first layouts: it must survive unmounting media.
+  const mediaSpoilerButton = !previewMode &&
+    (sensitive ||
+      filterInfo?.action === 'blur' ||
+      readingExpandMedia === 'hide_all') &&
+    !!mediaAttachments.length &&
+    (readingExpandMedia !== 'show_all' || filterInfo?.action === 'blur') && (
+      <button
+        class={`plain spoiler-media-button ${
+          showSpoilerMedia ? 'spoiling' : ''
+        }`}
+        type="button"
+        aria-expanded={showSpoilerMedia}
+        hidden={!readingExpandSpoilers && !!spoilerText}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (showSpoilerMedia) {
+            delete states.spoilersMedia[id];
+          } else {
+            states.spoilersMedia[id] = true;
+          }
+        }}
+      >
+        <Icon icon={showSpoilerMedia ? 'eye-open' : 'eye-close'} />{' '}
+        <span>
+          {filterInfo?.action === 'blur' && (
+            <small>
+              <Trans>Filtered: {filterInfo?.titlesStr}</Trans>
+              <br />
+            </small>
+          )}
+          {showSpoilerMedia ? t`Show less` : t`Show media`}
+        </span>
+      </button>
+    );
+
   return (
     <StatusParent>
       {showReplyParent && !!(inReplyToId && inReplyToAccountId) && (
@@ -2586,12 +2631,17 @@ function Status({
                     </button>
                   </>
                 )}
-                <MediaFirstContainer
-                  mediaAttachments={mediaAttachments}
-                  language={language}
-                  postID={id}
-                  instance={instance}
-                />
+                {hideMediaPreviews &&
+                  (readingExpandSpoilers || (!spoilerText && !sensitive)) &&
+                  mediaSpoilerButton}
+                {!hidingMediaPreview && (
+                  <MediaFirstContainer
+                    mediaAttachments={mediaAttachments}
+                    language={language}
+                    postID={id}
+                    instance={instance}
+                  />
+                )}
                 {!!content && (
                   <div class="media-first-content content" ref={contentRef}>
                     <PostContent
@@ -2718,44 +2768,9 @@ function Status({
                     })}
                   />
                 )}
-                {!previewMode &&
-                  (sensitive ||
-                    filterInfo?.action === 'blur' ||
-                    readingExpandMedia === 'hide_all') &&
+                {mediaSpoilerButton}
+                {!hidingMediaPreview &&
                   !!mediaAttachments.length &&
-                  (readingExpandMedia !== 'show_all' ||
-                    filterInfo?.action === 'blur') && (
-                    <button
-                      class={`plain spoiler-media-button ${
-                        showSpoilerMedia ? 'spoiling' : ''
-                      }`}
-                      type="button"
-                      hidden={!readingExpandSpoilers && !!spoilerText}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (showSpoilerMedia) {
-                          delete states.spoilersMedia[id];
-                        } else {
-                          states.spoilersMedia[id] = true;
-                        }
-                      }}
-                    >
-                      <Icon
-                        icon={showSpoilerMedia ? 'eye-open' : 'eye-close'}
-                      />{' '}
-                      <span>
-                        {filterInfo?.action === 'blur' && (
-                          <small>
-                            <Trans>Filtered: {filterInfo?.titlesStr}</Trans>
-                            <br />
-                          </small>
-                        )}
-                        {showSpoilerMedia ? t`Show less` : t`Show media`}
-                      </span>
-                    </button>
-                  )}
-                {!!mediaAttachments.length &&
                   (mediaAttachments.length > 1 &&
                   (isSizeLarge || (withinContext && size === 'm')) ? (
                     <div class="media-large-container">

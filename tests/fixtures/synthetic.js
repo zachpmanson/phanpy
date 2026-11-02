@@ -46,13 +46,13 @@ export function attachment(id = 'media-1') {
 
 export async function setupSynthetic(
   page,
-  { posts = [post()], preferences = {}, local = {} } = {},
+  { posts = [post()], preferences = {}, local = {}, version = '4.5.0' } = {},
 ) {
   const instance = {
     uri: 'fixture.invalid',
     domain: 'fixture.invalid',
     title: 'Synthetic Fixture',
-    version: '4.5.0',
+    version,
     configuration: {
       statuses: { max_characters: 500, max_media_attachments: 4 },
     },
