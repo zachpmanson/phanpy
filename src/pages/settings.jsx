@@ -225,6 +225,18 @@ function Settings({ onClose }) {
                 </form>
               </div>
             </li>
+            <li class="block">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={snapStates.compactMode}
+                  onChange={(e) => {
+                    states.compactMode = e.target.checked;
+                  }}
+                />{' '}
+                <Trans>Compact mode</Trans>
+              </label>
+            </li>
             <li>
               <div>
                 <label>

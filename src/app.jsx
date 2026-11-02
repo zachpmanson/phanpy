@@ -292,7 +292,15 @@ if (isIOS) {
 }
 
 {
-  const theme = store.local.get('theme');
+  let theme = store.local.get('theme');
+  // Migrate the old fork's plain theme to independent layout + automatic color.
+  if (theme === 'plain') {
+    store.local.del('theme');
+    store.local.set('compactMode', true);
+    states.compactMode = true;
+    theme = null;
+  }
+  document.documentElement.classList.toggle('is-compact', states.compactMode);
   // If there's a theme, it's NOT auto
   if (theme) {
     // dark | light
@@ -334,6 +342,10 @@ subscribe(states, (changes) => {
       if ($app) {
         $app.dataset.shortcutsViewMode = states.shortcuts?.length ? value : '';
       }
+    }
+
+    if (path.join('.') === 'compactMode') {
+      document.documentElement.classList.toggle('is-compact', value);
     }
 
     // Add/Remove cloak class to body

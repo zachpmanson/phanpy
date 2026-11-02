@@ -46,7 +46,13 @@ export function attachment(id = 'media-1') {
 
 export async function setupSynthetic(
   page,
-  { posts = [post()], preferences = {}, local = {}, version = '4.5.0' } = {},
+  {
+    posts = [post()],
+    preferences = {},
+    local = {},
+    version = '4.5.0',
+    context = { ancestors: [], descendants: [] },
+  } = {},
 ) {
   const instance = {
     uri: 'fixture.invalid',
@@ -58,7 +64,7 @@ export async function setupSynthetic(
     },
   };
   await page.addInitScript(
-    ({ local, instance, account }) => {
+    ({ local, instance, account, preferences }) => {
       if (!localStorage.getItem('accounts')) {
         localStorage.setItem(
           'accounts',
@@ -72,6 +78,10 @@ export async function setupSynthetic(
         );
         sessionStorage.setItem('currentAccount', '1');
         localStorage.setItem(
+          'preferences',
+          JSON.stringify({ '1@fixture.invalid': preferences }),
+        );
+        localStorage.setItem(
           'instances',
           JSON.stringify({ 'fixture.invalid': instance }),
         );
@@ -83,7 +93,7 @@ export async function setupSynthetic(
         }
       }
     },
-    { local, instance, account },
+    { local, instance, account, preferences },
   );
   await page.route('https://fixture.invalid/**', async (route) => {
     const { pathname } = new URL(route.request().url());
@@ -100,8 +110,7 @@ export async function setupSynthetic(
     else if (pathname.endsWith('/apps/verify_credentials'))
       json = { name: 'Synthetic' };
     else if (pathname.includes('/timelines/')) json = posts;
-    else if (pathname.endsWith('/context'))
-      json = { ancestors: [], descendants: [] };
+    else if (pathname.endsWith('/context')) json = context;
     else if (pathname.includes('/statuses/'))
       json = posts.find((p) => p.id === pathname.split('/').at(-1));
     else json = [];
@@ -118,4 +127,10 @@ export async function openSettings(page) {
 
 export async function closeSettings(page) {
   await page.locator('#settings-container .sheet-close').click();
+}
+
+export async function capture(page, testInfo, name) {
+  const path = testInfo.outputPath(`${name}.png`);
+  await page.screenshot({ path });
+  await testInfo.attach(name, { path, contentType: 'image/png' });
 }

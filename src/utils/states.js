@@ -21,6 +21,8 @@ function restorePrevLocation() {
 
 const states = proxy({
   appVersion: {},
+  // Browser-local layout, deliberately outside account settings.
+  compactMode: store.local.get('compactMode') === 'true',
   // history: [],
   prevLocation: restorePrevLocation(),
   currentLocation: null,
@@ -164,6 +166,10 @@ subscribeKey(states, 'notificationsLast', (v) => {
 subscribe(states, (changes) => {
   console.debug('STATES change', changes);
   for (const [action, path, value, prevValue] of changes) {
+    if (path.join('.') === 'compactMode') {
+      if (value) store.local.set('compactMode', true);
+      else store.local.del('compactMode');
+    }
     if (path.join('.') === 'settings.autoRefresh') {
       store.account.set('settings-autoRefresh', !!value);
     }

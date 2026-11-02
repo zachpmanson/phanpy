@@ -519,6 +519,8 @@ function Status({
     return null;
   }
 
+  const compactMode = snapStates.compactMode;
+
   console.debug('RENDER Status', id, status?.account?.displayName, quoted);
 
   const debugHover = (e) => {
@@ -2357,7 +2359,7 @@ function Status({
             )}
           </div>
         )}
-        {size !== 's' && (
+        {size !== 's' && !compactMode && (
           <a
             href={accountURL}
             tabindex="-1"
@@ -2388,7 +2390,8 @@ function Status({
                   <NameText
                     account={status.account}
                     instance={instance}
-                    showAvatar={size === 's'}
+                    showAvatar={size === 's' || compactMode}
+                    avatarSize={compactMode ? 'auto' : undefined}
                     showAcct={isSizeLarge}
                     subtle={
                       snapStates.settings.postUsernameOnly && !isSizeLarge

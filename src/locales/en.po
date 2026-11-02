@@ -5074,3 +5074,7 @@ msgstr "Hide link previews"
 #: src/pages/settings.jsx
 msgid "Hide media previews"
 msgstr "Hide media previews"
+
+#: src/pages/settings.jsx
+msgid "Compact mode"
+msgstr "Compact mode"

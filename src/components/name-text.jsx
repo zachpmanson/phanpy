@@ -31,6 +31,7 @@ function NameText({
   account,
   instance,
   showAvatar,
+  avatarSize,
   showAcct,
   short,
   external,
@@ -108,7 +109,11 @@ function NameText({
     >
       {showAvatar && (
         <>
-          <Avatar url={avatarStatic || avatar} squircle={bot} />{' '}
+          <Avatar
+            url={avatarStatic || avatar}
+            squircle={bot}
+            size={avatarSize}
+          />{' '}
         </>
       )}
       {displayName && !short && !subtle ? (

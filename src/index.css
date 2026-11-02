@@ -864,3 +864,7 @@ grapheme-input {
     transition-delay: 0.3s;
   }
 }
+
+html.is-compact {
+  --avatar-size: 25px;
+}

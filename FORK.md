@@ -41,3 +41,32 @@ Account key `settings-hideMediaPreviews`, default false, is retained. This is de
 Intentional improvement over the old fork: media-first ordinary `hide_all` and blur-filtered posts retain a separate reveal control even when their renderer is absent, so attachments are not stranded. Content-warning/sensitive media-first posts keep their existing Show content control. Show less unmounts media again. Shared control extraction leaves normal upstream behavior unchanged when the toggle is off.
 
 18 desktop/mobile checks pass, covering actual height reduction, single/multiple attachments, large-post multi-media, sensitivity, filter override of show-all, CW reveal/re-collapse, media-first ordinary and CW layouts, live toggling and reload persistence.
+
+## Compact layout
+
+Browser-local `compactMode` is independent of account settings and light/dark/auto colors. The old `theme=plain` value migrates to compact + automatic colors. Unlike the old fork's direct storage read during render, a reactive browser-local state updates already-mounted cards immediately. Avatars move inline, with font-relative size **only in compact status headers**; non-compact upstream avatar sizing is unchanged. Existing username-only, metric hiding and translation menu behavior is retained. The fork's flat decks and simpler reply-tree styling are scoped to `html.is-compact`.
+
+12 focused desktop/mobile checks pass: live existing-card toggles, light/dark, old-plain migration, reload, multi-column widths, nested contextual replies/hero alignment, upstream username/metric/translation controls and account initialization preserving browser-local layout. Screenshots are generated under ignored `test-results/compact-mode-*` (light/dark, columns and thread, desktop/mobile); implementation review inspected these for avatar and reply-tree alignment. Menu translation is checked without making a translation request.
+
+## Final local validation / handoff
+
+All commands below ran inside `nix develop path:.`; test server is owned by Playwright on dedicated port 5189, no shell backgrounding or reuse.
+
+- `npm run build`: PASS on upstream baseline and final app.
+- `npm run formatting-check`: PASS baseline and final (331 files).
+- `npm run messages:compile`: PASS on the committed messages-only English catalog; `git diff --check`: PASS.
+- `npm test -- --config playwright.chromium.config.js`: completed final run **172 passed, 2 skipped, 2 failed (3.6m)**. The only failures are the same baseline `tests/date-time-format.spec.js:176` en-SG assertion, resolving en-AU in both projects. The two skips are existing CloseWatcher behavior. All 36 new desktop/mobile feature/isolation cases pass in the combined run.
+- `npm test -- --config playwright.local.config.js`: final **25 passed, 63 failed**. All failures require launching the missing WebKit executable; real Mobile Safari/WebKit remains unverified. The upstream config and its Mobile Safari default were not replaced or weakened.
+- `npm test -- --config playwright.chromium.config.js tests/media-collapse.spec.js --grep 'large post' --repeat-each=3`: **6 passed** after waiting for the initial contextual thread fetch to settle. Earlier combined execution hit the tool timeout; its dedicated Vite process was terminated locally before rerunning successfully. No other agent's processes were touched.
+
+Lingui's automatic extraction rewrites source locations while Vite runs. The committed English catalog deliberately restores the complete upstream catalog and appends only the four new labels, with no removed or changed upstream messages. Other locales and all application dependency manifests/lockfiles are unchanged.
+
+### Remaining review items
+
+- Safari/WebKit validation requires a working matching Playwright WebKit runtime; Chromium mobile emulation is not Safari evidence.
+- Inherited slider debounce: closing Settings within 500ms of moving column width can discard the pending change. Normal settled persistence, absent-column storage and mount behavior are covered; independent reviewer identified this P2 follow-up. No last-minute scope expansion was made.
+- Optional extra matrix coverage: media-first blur + show-all and explicit preview-mode rendering. Current checks cover ordinary media-first hide-all/CW, normal blur overriding show-all and explicit reveals; preview mode precedence is retained in code.
+- Existing locale-test expectation, upstream install engine warning/audit findings and initial non-isolated run limitation above remain disclosed.
+- No pushes, CI edits, deployments, remote writes, real account credentials or deliberate live Mastodon calls. The original fork/worktree and main/upstream history are untouched. `.pi-subagents/` is runtime coordination output, intentionally untracked and excluded from feature commits.
+
+Review the five new commits with `git log --oneline a03425ea..HEAD`; no history rewrite is necessary. Parent owns independent acceptance review and any approved follow-up fixes.

@@ -34,3 +34,8 @@ a.name-text.short:is(:hover, :focus) i {
   vertical-align: middle;
   transform: translateY(-0.1em);
 }
+
+html.is-compact .name-text .avatar {
+  width: 1em;
+  height: 1em;
+}

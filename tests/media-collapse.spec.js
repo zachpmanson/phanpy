@@ -169,7 +169,12 @@ test('large post multi-attachment branch collapses and re-collapses', async ({
     preferences: { 'reading:expand:media': 'hide_all' },
     local: hidden,
   });
+  const contextLoaded = page.waitForResponse('**/api/v1/statuses/123/context');
   await page.goto('/#/fixture.invalid/s/123');
+  await contextLoaded;
+  await expect(page.locator('.timeline.contextual')).not.toHaveClass(
+    /\bloading\b/,
+  );
   const status = article(page).and(page.locator('.large'));
   await expect(status.locator('.media-large-container')).toHaveCount(0);
   await status.getByRole('button', { name: 'Show media', exact: true }).click();
