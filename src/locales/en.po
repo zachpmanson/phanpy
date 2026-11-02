@@ -5066,3 +5066,7 @@ msgstr ""
 #: src/pages/settings.jsx
 msgid "Column width"
 msgstr "Column width"
+
+#: src/pages/settings.jsx
+msgid "Hide link previews"
+msgstr "Hide link previews"

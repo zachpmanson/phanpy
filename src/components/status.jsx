@@ -701,8 +701,12 @@ function Status({
   // const targetLanguage = getTranslateTargetLanguage(true);
   // const contentTranslationHideLanguages =
   //   snapStates.settings.contentTranslationHideLanguages || [];
-  const { contentTranslation, contentTranslationAutoInline, hidePostMetrics } =
-    snapStates.settings;
+  const {
+    contentTranslation,
+    contentTranslationAutoInline,
+    hidePostMetrics,
+    hideLinkPreviews,
+  } = snapStates.settings;
   if (!contentTranslation) enableTranslate = false;
   const inlineTranslate = useMemo(() => {
     if (
@@ -2846,7 +2850,9 @@ function Status({
                         />
                       ))}
                     </div>
-                  ) : !!card && /^https/i.test(card?.url) ? (
+                  ) : !hideLinkPreviews &&
+                    !!card &&
+                    /^https/i.test(card?.url) ? (
                     <StatusCard
                       card={card}
                       selfReferential={

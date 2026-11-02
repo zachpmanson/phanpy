@@ -29,3 +29,7 @@ All local Git shells must source `/tmp/beltino-time-travel-phanpy.sh` and use it
 ## Column width
 
 360–600px, default 360, browser-local key `columnSize`. Persistence no longer depends on `#columns` existing; mounting Columns reapplies the saved width. The slider has an accessible label. Focused desktop/mobile regression checks pass for absent columns, reload, mount, live 600px and reset.
+
+## Link cards
+
+Account setting `settings-hideLinkPreviews` defaults false. Only the upstream `StatusCard` branch is suppressed; native/inline quoted posts, text, collections and other upstream branches remain intact. Desktop/mobile regression checks cover defaults, live toggling, namespace preservation and reload.
