@@ -30,6 +30,11 @@ import states from '../utils/states';
 import store from '../utils/store';
 import { getAPIVersions, getVapidKey } from '../utils/store-utils';
 
+const DEFAULT_COLUMN_WIDTH = 360;
+const SMALLEST_COLUMN_WIDTH = 360;
+const LARGEST_COLUMN_WIDTH = 600;
+const COLUMN_WIDTHS = [360, 400, 440, 480, 520, 560, 600];
+
 const DEFAULT_TEXT_SIZE = 16;
 const TEXT_SIZES = [14, 15, 16, 17, 18, 19, 20];
 const SMALLEST_TEXT_SIZE = TEXT_SIZES[0];
@@ -60,6 +65,8 @@ function Settings({ onClose }) {
   const systemTargetLanguage = getTranslateTargetLanguage();
   const systemTargetLanguageText = localeCode2Text(systemTargetLanguage);
   const currentTextSize = store.local.get('textSize') || DEFAULT_TEXT_SIZE;
+  const currentColumnSize =
+    Number(store.local.get('columnSize')) || DEFAULT_COLUMN_WIDTH;
 
   const [prefs, setPrefs] = useState(getPreferences());
   const { masto, authenticated, instance } = api();
@@ -226,6 +233,15 @@ function Settings({ onClose }) {
               </div>
               <TextSizeControl currentTextSize={currentTextSize} />
             </li>
+            <li>
+              <div>
+                <label for="column-size-field">
+                  <Trans>Column width</Trans>
+                </label>
+              </div>
+              <ColumnSizeControl currentColumnSize={currentColumnSize} />
+            </li>
+
             <li>
               <span>
                 <label>
@@ -1200,6 +1216,48 @@ function TextSizeControl({ currentTextSize }) {
       </button>
       <datalist id="sizes">
         {TEXT_SIZES.map((size) => (
+          <option value={size} />
+        ))}
+      </datalist>
+    </div>
+  );
+}
+
+function ColumnSizeControl({ currentColumnSize }) {
+  const columnSizeFieldRef = useRef(null);
+  const [size, setSize] = useState(currentColumnSize);
+  const [debouncedSize] = useDebounce(size, 500);
+
+  useEffect(() => {
+    // Persist even when the multi-column view is not currently mounted.
+    if (debouncedSize === DEFAULT_COLUMN_WIDTH) {
+      store.local.del('columnSize');
+    } else {
+      store.local.set('columnSize', debouncedSize);
+    }
+    document
+      .getElementById('columns')
+      ?.style.setProperty('--column-size', `${debouncedSize}px`);
+  }, [debouncedSize]);
+
+  return (
+    <div class={`text-size-control ${size !== debouncedSize ? 'loading' : ''}`}>
+      <input
+        id="column-size-field"
+        ref={columnSizeFieldRef}
+        type="range"
+        min={SMALLEST_COLUMN_WIDTH}
+        max={LARGEST_COLUMN_WIDTH}
+        step="1"
+        value={size}
+        list="widths"
+        onChange={(e) => {
+          const value = parseInt(e.target.value, 10);
+          setSize(value);
+        }}
+      />{' '}
+      <datalist id="widths">
+        {COLUMN_WIDTHS.map((size) => (
           <option value={size} />
         ))}
       </datalist>

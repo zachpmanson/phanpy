@@ -2870,6 +2870,7 @@ ul.link-list li a .icon {
   scroll-snap-stop: always;
   overscroll-behavior: auto;
   flex-basis: min(100vw, var(--column-size));
+  transition: flex-basis 0.3s ease-in-out;
   flex-shrink: 0;
   box-shadow:
     -1px 0 var(--bg-color),

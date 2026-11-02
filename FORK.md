@@ -25,3 +25,7 @@ An initial batch did not stop after an unavailable Python helper, so the first C
 - Compact layout: `1f2f2d554975649134d1bd0c2863e7a7420bf1ce`
 
 All local Git shells must source `/tmp/beltino-time-travel-phanpy.sh` and use its `git` function for commits. Push URLs remain disabled. Generated build/test output stays ignored.
+
+## Column width
+
+360–600px, default 360, browser-local key `columnSize`. Persistence no longer depends on `#columns` existing; mounting Columns reapplies the saved width. The slider has an accessible label. Focused desktop/mobile regression checks pass for absent columns, reload, mount, live 600px and reset.

@@ -5062,3 +5062,7 @@ msgstr ""
 #: src/utils/show-compose.js:21
 msgid "A post is currently open. Post or discard it before creating a new one."
 msgstr ""
+
+#: src/pages/settings.jsx
+msgid "Column width"
+msgstr "Column width"
