@@ -67,6 +67,15 @@ Lingui's automatic extraction rewrites source locations while Vite runs. The com
 - Inherited slider debounce: closing Settings within 500ms of moving column width can discard the pending change. Normal settled persistence, absent-column storage and mount behavior are covered; independent reviewer identified this P2 follow-up. No last-minute scope expansion was made.
 - Optional extra matrix coverage: media-first blur + show-all and explicit preview-mode rendering. Current checks cover ordinary media-first hide-all/CW, normal blur overriding show-all and explicit reveals; preview mode precedence is retained in code.
 - Existing locale-test expectation, upstream install engine warning/audit findings and initial non-isolated run limitation above remain disclosed.
-- No pushes, CI edits, deployments, remote writes, real account credentials or deliberate live Mastodon calls. The original fork/worktree and main/upstream history are untouched. `.pi-subagents/` is runtime coordination output, intentionally untracked and excluded from feature commits.
+- No pushes, deployments, remote writes, real account credentials or deliberate live Mastodon calls. The owner subsequently authorized local workflow removal as a separate policy change below. The original fork/worktree and main/upstream history are untouched. `.pi-subagents/` is runtime coordination output, intentionally untracked and excluded from feature commits.
 
-Review the five new commits with `git log --oneline a03425ea..HEAD`; no history rewrite is necessary. Parent owns independent acceptance review and any approved follow-up fixes.
+Review the six new commits with `git log --oneline a03425ea..HEAD`; no history rewrite is necessary. Parent owns independent acceptance review and any approved follow-up fixes.
+
+
+## Hosted CI intentionally disabled for this fork
+
+After the four UI features, the owner explicitly requested disabling inherited CI as part of this local change set. A separate commit removes **all ten** inherited hosted workflow files from `.github/workflows/`: autofix, bundle-size, custom-build, i18n-automerge, i18n-update-readme, main2prod, playwright, prodtag, rollbar-deploy and update-catalogs (all `.yml`). Removing definitions avoids triggering even skipped workflow records; job-level guards would not meet that intent. No GitHub repository Actions setting, remote API, local test script or browser/build gate was changed. This is an intentional fork policy difference, not a fifth UI feature.
+
+The upstream workflow originals remain available at `upstream/main:.github/workflows/` and at this refresh's base commit. For a future restoration, first inspect the upstream definitions and obtain owner approval, then selectively restore with `git restore --source=upstream/main -- .github/workflows/<approved-file>.yml` in a time-travel-wrapped Git shell, review triggers/secrets/write permissions/deployment targets, and commit locally. Do not restore blindly: several inherited workflows can write, merge, tag or deploy.
+
+Every future upstream refresh must explicitly audit `.github/workflows/` for newly added or restored definitions and remove them again unless the owner authorizes a policy change. Continue running the documented local checks manually. A future push still requires fresh owner approval and a safety preflight; **no push, PR, remote Actions change or deployment is authorized by this local policy commit**.
