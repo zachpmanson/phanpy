@@ -1260,27 +1260,12 @@ function TextSizeControl({ currentTextSize }) {
 }
 
 function ColumnSizeControl({ currentColumnSize }) {
-  const columnSizeFieldRef = useRef(null);
   const [size, setSize] = useState(currentColumnSize);
-  const [debouncedSize] = useDebounce(size, 500);
-
-  useEffect(() => {
-    // Persist even when the multi-column view is not currently mounted.
-    if (debouncedSize === DEFAULT_COLUMN_WIDTH) {
-      store.local.del('columnSize');
-    } else {
-      store.local.set('columnSize', debouncedSize);
-    }
-    document
-      .getElementById('columns')
-      ?.style.setProperty('--column-size', `${debouncedSize}px`);
-  }, [debouncedSize]);
 
   return (
-    <div class={`text-size-control ${size !== debouncedSize ? 'loading' : ''}`}>
+    <div class="text-size-control">
       <input
         id="column-size-field"
-        ref={columnSizeFieldRef}
         type="range"
         min={SMALLEST_COLUMN_WIDTH}
         max={LARGEST_COLUMN_WIDTH}
@@ -1289,6 +1274,12 @@ function ColumnSizeControl({ currentColumnSize }) {
         list="widths"
         onChange={(e) => {
           const value = parseInt(e.target.value, 10);
+          // Save before Settings can close; an unmounted debounce loses changes.
+          if (value === DEFAULT_COLUMN_WIDTH) store.local.del('columnSize');
+          else store.local.set('columnSize', value);
+          document
+            .getElementById('columns')
+            ?.style.setProperty('--column-size', `${value}px`);
           setSize(value);
         }}
       />{' '}

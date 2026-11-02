@@ -28,7 +28,7 @@ All local Git shells must source `/tmp/beltino-time-travel-phanpy.sh` and use it
 
 ## Column width
 
-360–600px, default 360, browser-local key `columnSize`. Persistence no longer depends on `#columns` existing; mounting Columns reapplies the saved width. The slider has an accessible label. Focused desktop/mobile regression checks pass for absent columns, reload, mount, live 600px and reset.
+360–600px, default 360, browser-local key `columnSize`. Persistence no longer depends on `#columns` existing; mounting Columns reapplies the saved width. Slider changes persist and update CSS synchronously, so closing Settings immediately cannot discard a pending debounce. The upstream text-size debounce is unchanged. The slider has an accessible label. Desktop/mobile regressions cover absent columns, reload, mount, live 600px, reset and changing/resetting immediately before close.
 
 ## Link cards
 
@@ -40,7 +40,7 @@ Account key `settings-hideMediaPreviews`, default false, is retained. This is de
 
 Intentional improvement over the old fork: media-first ordinary `hide_all` and blur-filtered posts retain a separate reveal control even when their renderer is absent, so attachments are not stranded. Content-warning/sensitive media-first posts keep their existing Show content control. Show less unmounts media again. Shared control extraction leaves normal upstream behavior unchanged when the toggle is off.
 
-18 desktop/mobile checks pass, covering actual height reduction, single/multiple attachments, large-post multi-media, sensitivity, filter override of show-all, CW reveal/re-collapse, media-first ordinary and CW layouts, live toggling and reload persistence.
+18 desktop/mobile checks cover actual height reduction, single/multiple attachments, large-post multi-media, sensitivity, filter override of show-all, CW reveal/re-collapse, media-first ordinary and CW layouts, live toggling and reload persistence. Full-post heroes intentionally retain the original fork/upstream one-second auto-reveal. Their regression waits for that existing reveal, then verifies collapse, manual re-reveal and re-collapse; it must not race the delayed upstream click or assert that heroes always start collapsed.
 
 ## Compact layout
 
@@ -55,21 +55,27 @@ All commands below ran inside `nix develop path:.`; test server is owned by Play
 - `npm run build`: PASS on upstream baseline and final app.
 - `npm run formatting-check`: PASS baseline and final (331 files).
 - `npm run messages:compile`: PASS on the committed messages-only English catalog; `git diff --check`: PASS.
-- `npm test -- --config playwright.chromium.config.js`: completed final run **172 passed, 2 skipped, 2 failed (3.6m)**. The only failures are the same baseline `tests/date-time-format.spec.js:176` en-SG assertion, resolving en-AU in both projects. The two skips are existing CloseWatcher behavior. All 36 new desktop/mobile feature/isolation cases pass in the combined run.
+- `npm test -- --config playwright.chromium.config.js`: completed worker-snapshot full run before parent acceptance follow-ups: **172 passed, 2 skipped, 2 failed (3.6m)**. The only failures are the same baseline `tests/date-time-format.spec.js:176` en-SG assertion, resolving en-AU in both projects. The two skips are existing CloseWatcher behavior. All 36 new desktop/mobile feature/isolation cases pass in the combined run.
 - `npm test -- --config playwright.local.config.js`: final **25 passed, 63 failed**. All failures require launching the missing WebKit executable; real Mobile Safari/WebKit remains unverified. The upstream config and its Mobile Safari default were not replaced or weakened.
 - `npm test -- --config playwright.chromium.config.js tests/media-collapse.spec.js --grep 'large post' --repeat-each=3`: **6 passed** after waiting for the initial contextual thread fetch to settle. Earlier combined execution hit the tool timeout; its dedicated Vite process was terminated locally before rerunning successfully. No other agent's processes were touched.
 
 Lingui's automatic extraction rewrites source locations while Vite runs. The committed English catalog deliberately restores the complete upstream catalog and appends only the four new labels, with no removed or changed upstream messages. Other locales and all application dependency manifests/lockfiles are unchanged.
 
+### Parent acceptance follow-ups
+
+- Reproduced the inherited 500ms slider-close loss on desktop and mobile (expected saved 560, received null), then fixed width persistence/CSS updates synchronously. A deterministic same-JavaScript-task change/close test covers 560 and reset360, storage, current columns and reopening Settings. Independent targeted review found no blocker.
+- First parent feature run was 37 passed/1 failed: the large-post test raced the existing one-second hero auto-reveal, which exists unchanged in both upstream and the original fork. Corrected the test to preserve that contract rather than changing product behavior. Independent static review verified expanded3 → collapsed0 → manual reveal3 → collapsed0; the inherited one-shot reveal can still be missed if its control mounts too late.
+- Parent final feature/isolation acceptance: **38 passed (1.8m)** in desktop/mobile Chromium; repeated hero regression **6 passed (24.4s)**. Final formatting, application build, committed-catalog compilation and whitespace checks pass. This focused final run is distinct from the full-suite snapshot above; the complete suite is not claimed green.
+- Parent inspected synthetic desktop reply-tree and mobile dark-mode screenshots. Results/screenshots: `/home/beltino/.cache/beltino/phanpy-refresh/final-feature-results/`; earlier failures and repeated checks are retained separately there. Final logs are `/tmp/phanpy-parent-{final-features,hero-repeat,format,build,messages}.log`.
+
 ### Remaining review items
 
 - Safari/WebKit validation requires a working matching Playwright WebKit runtime; Chromium mobile emulation is not Safari evidence.
-- Inherited slider debounce: closing Settings within 500ms of moving column width can discard the pending change. Normal settled persistence, absent-column storage and mount behavior are covered; independent reviewer identified this P2 follow-up. No last-minute scope expansion was made.
 - Optional extra matrix coverage: media-first blur + show-all and explicit preview-mode rendering. Current checks cover ordinary media-first hide-all/CW, normal blur overriding show-all and explicit reveals; preview mode precedence is retained in code.
 - Existing locale-test expectation, upstream install engine warning/audit findings and initial non-isolated run limitation above remain disclosed.
 - No pushes, deployments, remote writes, real account credentials or deliberate live Mastodon calls. The owner subsequently authorized local workflow removal as a separate policy change below. The original fork/worktree and main/upstream history are untouched. `.pi-subagents/` is runtime coordination output, intentionally untracked and excluded from feature commits.
 
-Review the six new commits with `git log --oneline a03425ea..HEAD`; no history rewrite is necessary. Parent owns independent acceptance review and any approved follow-up fixes.
+Review the local series with `git log --oneline a03425ea..HEAD`; no history rewrite is necessary. Parent acceptance and its small follow-up fixes remain entirely local.
 
 
 ## Hosted CI intentionally disabled for this fork

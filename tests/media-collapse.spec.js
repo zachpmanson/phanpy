@@ -161,7 +161,7 @@ test('media-first ordinary hide_all has a reveal control even with renderer abse
   await expect(article(page).locator('.media-first-container')).toHaveCount(0);
 });
 
-test('large post multi-attachment branch collapses and re-collapses', async ({
+test('large post retains upstream auto-reveal and supports multi-attachment re-collapse', async ({
   page,
 }) => {
   await setupSynthetic(page, {
@@ -176,6 +176,13 @@ test('large post multi-attachment branch collapses and re-collapses', async ({
     /\bloading\b/,
   );
   const status = article(page).and(page.locator('.large'));
+  // Both upstream and the original fork auto-reveal the hero after one second.
+  // Wait for that existing behaviour instead of racing its delayed button click.
+  await expect(
+    status.getByRole('button', { name: 'Show less', exact: true }),
+  ).toBeVisible();
+  await expect(status.locator('.media-large-container .media')).toHaveCount(3);
+  await status.getByRole('button', { name: 'Show less', exact: true }).click();
   await expect(status.locator('.media-large-container')).toHaveCount(0);
   await status.getByRole('button', { name: 'Show media', exact: true }).click();
   await expect(status.locator('.media-large-container .media')).toHaveCount(3);
